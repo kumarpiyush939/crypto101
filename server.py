@@ -1,5 +1,13 @@
 import socket
 import threading
+from cryptography.fernet import Fernet
+
+
+# Open file and get key
+file = open('key.key', 'rb')  
+key = file.read()  
+file.close()
+f = Fernet(key)
 
 # Connection Data
 host = '127.0.0.1'
@@ -27,7 +35,10 @@ def handle(client):
         try:
             # Broadcasting Messages
             message = client.recv(1024)
-            broadcast(message)
+            print(type(message))
+            print(message)
+            broadcast(f.decrypt(message))
+            # broadcast(message)
         except:
             # Removing And Closing Clients
             index = clients.index(client)
@@ -46,7 +57,7 @@ def receive():
         print("Connected with {}".format(str(address)))
 
         # Request And Store Nickname
-        client.send('NICK'.encode('ascii'))
+        client.send('START'.encode('ascii'))
         nickname = client.recv(1024).decode('ascii')
         nicknames.append(nickname)
         clients.append(client)
