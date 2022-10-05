@@ -9,7 +9,6 @@ key = file.read()
 file.close()
 
 f = Fernet(key)
-# encrypted = f.encrypt(message)
 
 # Choosing Nickname
 nickname = input("Choose your nickname: ")
@@ -23,7 +22,6 @@ def receive():
     while True:
         try:
             # Receive Message From Server
-            # If 'NICK' Send Nickname
             message = client.recv(1024).decode('ascii')
             if message == 'START':
                 client.send(nickname.encode('ascii'))
